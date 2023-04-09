@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, Go!")
+	fmt.Println("Server started")
 	server.Run()
 }
