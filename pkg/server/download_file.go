@@ -15,11 +15,12 @@ import (
 func (s *GRPCServer) DownloadFile(ctx context.Context, req *gen.DownloadFileRequest) (*gen.DownloadFileResponse, error) {
 	// Получаем информацию о файле
 	fileInfo := &gen.FileInfo{}
-	file, err := os.Open(req.Name)
+
+	file, err := os.Open("savedFiles\\" + req.Name)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "unable to open file: %v", err)
 	}
-	file.Close()
+	defer file.Close()
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
