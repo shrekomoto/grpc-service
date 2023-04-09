@@ -1,8 +1,9 @@
-package client
+package main
 
 import (
 	"awesomeProject/service/gen"
 	"context"
+	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -13,7 +14,7 @@ import (
 
 func main() {
 	// устанавливаем соединение с сервером
-	conn, err := grpc.Dial(":8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(":8000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("unable to connect to server: %v", err)
 	}
@@ -21,8 +22,10 @@ func main() {
 	// создаем клиент для сервиса FileService
 	client := gen.NewFileServiceClient(conn)
 
+	var file string
+	fmt.Scan(&file)
 	// читаем содержимое файла в переменную content
-	content, err := os.ReadFile("file.jpg")
+	content, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatalf("unable to read file content: %v", err)
 	}

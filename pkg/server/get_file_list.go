@@ -12,7 +12,7 @@ import (
 )
 
 // метод GetFileList для получения списка файлов на сервере
-func (s *GRPCServer) GetFileList(*emptypb.Empty, gen.FileService_GetFileListServer) error {
+func (s *GRPCServer) GetFileList(empty *emptypb.Empty, stream gen.FileService_GetFileListServer) error {
 	// Получаем список файлов в директории
 	files, err := os.ReadDir(".")
 	if err != nil {
@@ -30,6 +30,7 @@ func (s *GRPCServer) GetFileList(*emptypb.Empty, gen.FileService_GetFileListServ
 		return status.Errorf(codes.Internal, "unable to read directory: %v", err)
 	}
 	// Отправляем список файлов через стрим
+	arr := make([]string, len(infos))
 	for _, file := range infos {
 		// изменяем формат даты
 		createdAt := timestamppb.New(file.ModTime())
@@ -39,9 +40,10 @@ func (s *GRPCServer) GetFileList(*emptypb.Empty, gen.FileService_GetFileListServ
 			CreatedAt: createdAt,
 			UpdatedAt: updatedAt,
 		}
-		if err := stream.Send(&gen.GetFileListResponse{List: info.String()}); err != nil {
-			return status.Errorf(codes.Internal, "unable to send file info: %v", err)
-		}
+		arr = append(arr, info.String())
+	}
+	if err := stream.Send(&gen.GetFileListResponse{List: arr}); err != nil {
+		return status.Errorf(codes.Internal, "unable to send file info: %v", err)
 	}
 	return nil
 }

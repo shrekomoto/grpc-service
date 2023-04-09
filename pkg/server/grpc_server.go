@@ -18,7 +18,7 @@ func Run() {
 	srv := &GRPCServer{}
 	gen.RegisterFileServiceServer(server, srv)
 
-	listener, err := net.Listen("tcp", ":8080")
+	listener, err := net.Listen("tcp", ":8000")
 	if err != nil {
 		log.Fatal(err)
 	}
