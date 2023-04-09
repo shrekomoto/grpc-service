@@ -19,6 +19,7 @@ func (s *GRPCServer) DownloadFile(ctx context.Context, req *gen.DownloadFileRequ
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "unable to open file: %v", err)
 	}
+	file.Close()
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {

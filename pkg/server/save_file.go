@@ -17,7 +17,6 @@ import (
 //}
 
 func (s *GRPCServer) SaveFile(ctx context.Context, req *gen.SaveFileRequest) (*gen.SaveFileResponse, error) {
-	var newFilePath string
 	if files, _ := os.ReadDir(server_path); files != nil {
 		err := os.Mkdir(server_path, 0750)
 		if err != nil && !os.IsExist(err) {

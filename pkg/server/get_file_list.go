@@ -2,9 +2,9 @@ package server
 
 import (
 	"awesomeProject/service/gen"
-	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"io/fs"
 	"log"
@@ -12,7 +12,7 @@ import (
 )
 
 // метод GetFileList для получения списка файлов на сервере
-func (s *GRPCServer) GetFileList(empty *empty.Empty, stream *gen.FileService_GetFileListServer) error {
+func (s *GRPCServer) GetFileList(*emptypb.Empty, gen.FileService_GetFileListServer) error {
 	// Получаем список файлов в директории
 	files, err := os.ReadDir(".")
 	if err != nil {
