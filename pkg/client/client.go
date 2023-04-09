@@ -3,7 +3,7 @@ package main
 import (
 	"awesomeProject/service/gen"
 	"context"
-	"fmt"
+	"flag"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -13,6 +13,8 @@ import (
 )
 
 func main() {
+	flag.Parse()
+	file := flag.Arg(0)
 	// устанавливаем соединение с сервером
 	conn, err := grpc.Dial(":8000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -22,8 +24,6 @@ func main() {
 	// создаем клиент для сервиса FileService
 	client := gen.NewFileServiceClient(conn)
 
-	var file string
-	fmt.Scan(&file)
 	// читаем содержимое файла в переменную content
 	content, err := os.ReadFile(file)
 	if err != nil {
